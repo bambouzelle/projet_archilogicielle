@@ -1,0 +1,31 @@
+
+services:
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=flowerpower_db;Username=flowerpower_user;Password=flowerpower_password
+      - Jwt__Key=your_secret_key
+      - Jwt__Issuer=your_issuer
+      - Jwt__Audience=your_audience
+      - Jwt__Subject=your_subject
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: flowerpower_postgres
+    environment:
+      POSTGRES_USER: flowerpower_user
+      POSTGRES_PASSWORD: flowerpower_password
+      POSTGRES_DB: flowerpower_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
